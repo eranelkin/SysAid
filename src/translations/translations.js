@@ -9,4 +9,5 @@ export const translations = {
   email: "Enter your email",
   username: "Enter you username",
   loginIn: " Login In",
+  err: "ERR",
 };

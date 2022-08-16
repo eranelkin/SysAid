@@ -9,6 +9,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import { translations } from "../../translations/translations";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 import { useStyles } from "./header.style";
@@ -17,9 +18,15 @@ import MenuItem from "@mui/material/MenuItem";
 
 const Header = ({ pages }) => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const classes = useStyles();
 
-  console.log("XXX: ", user);
+  const handleRoute = (route) => () => {
+    if (route) {
+      navigate(route);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="primary" className={classes.header}>
@@ -27,10 +34,20 @@ const Header = ({ pages }) => {
           <Typography variant="h6" component="div">
             {translations.sysAid}
           </Typography>
-          <Button variant="outlined" color="inherit" style={{ marginLeft: 20 }}>
+          <Button
+            variant="outlined"
+            color="inherit"
+            style={{ marginLeft: 20 }}
+            onClick={handleRoute("/")}
+          >
             {translations.calculator}
           </Button>
-          <Button variant="outlined" color="inherit" style={{ marginLeft: 20 }}>
+          <Button
+            variant="outlined"
+            color="inherit"
+            style={{ marginLeft: 20 }}
+            onClick={handleRoute("/history")}
+          >
             {translations.history}
           </Button>
 
