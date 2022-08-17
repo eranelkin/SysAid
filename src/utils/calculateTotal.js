@@ -45,11 +45,13 @@ const calculate = (input) => {
   for (let i = 0, n = actions.actionsOrder.length; i < n; i++) {
     const startWithOperator = /^[*/\\+-]/;
     const endWithOperator = /[*/\\+-]$/;
+    const withOperator = /[*/\\+-]/;
     const zeroDevide = /\/0$/;
 
     if (startWithOperator.test(input)) return ERRORS.OPERATOR_START;
     if (endWithOperator.test(input)) return ERRORS.OPERATOR_END;
     if (zeroDevide.test(input)) return ERRORS.ZERO_DEVIDE;
+    if (!withOperator.test(input)) return Number(input);
     if (new Set(input).has("0") && new Set(input).size === 1) return 0;
 
     const regE = new RegExp(
