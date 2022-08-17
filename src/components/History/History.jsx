@@ -4,10 +4,16 @@ import { Button } from "@mui/material";
 import { useCalculator } from "../../hooks/useCalculator";
 import { translations } from "../../translations/translations";
 import clsx from "clsx";
+import { ACTIONS_COUNT } from "../../constants";
 
-function History() {
-  const { historyActions, clearHistory, isValid, totalIndexes } =
-    useCalculator();
+const History = () => {
+  const { historyActions, clearHistory, totalIndexes } = useCalculator();
+  const totals =
+    historyActions.length > ACTIONS_COUNT
+      ? totalIndexes
+          .map((total) => total - (historyActions.length - ACTIONS_COUNT))
+          .filter((total) => total >= 0)
+      : [...totalIndexes];
   const classes = useStyles();
 
   const handleClearHistory = () => {
@@ -19,13 +25,13 @@ function History() {
     <div className={classes.history}>
       <div className={classes.historyBoard}>
         {shouldDisplay &&
-          historyActions.map((item, index) => (
+          historyActions.slice(ACTIONS_COUNT * -1).map((item, index) => (
             <span key={`${item}-${index}`} className={classes.historyRow}>
               <div className={classes.counter}>{`${index + 1}.`}</div>
               <div
                 className={clsx(classes.action, {
                   [classes.error]: item === translations.err,
-                  [classes.total]: totalIndexes.includes(index),
+                  [classes.total]: totals.includes(index),
                 })}
               >
                 {item}
@@ -34,7 +40,7 @@ function History() {
           ))}
       </div>
       <Button
-        variant="solid"
+        variant="contained"
         size="md"
         onClick={handleClearHistory}
         className={classes.clearHistory}
@@ -43,6 +49,6 @@ function History() {
       </Button>
     </div>
   );
-}
+};
 
 export default History;

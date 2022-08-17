@@ -3,55 +3,83 @@ import { calculate } from "../utils/calculateTotal";
 import { translations } from "../translations/translations";
 
 const CalculatorContext = createContext();
-const ACTIONS_COUNT = 20;
 const action = ["*", "/", "+", "-"];
 
 export const CalculatorProvider = ({ children }) => {
   const [historyActions, setHistoryActions] = useState([]);
   const [sessionActions, setSessionActions] = useState([]);
   const [isValid, setIsValid] = useState(true);
+  const [lastError, setLastError] = useState(null);
   const [totalIndexes, setTotalIndexes] = useState([]);
 
-  const addAction = (value) => {
-    let updatedHistoryActions = [...historyActions, value];
-    let updatedSessionActions = [...sessionActions, value];
-
-    if (updatedHistoryActions.length > ACTIONS_COUNT)
-      updatedHistoryActions.shift();
-    if (updatedSessionActions.length > ACTIONS_COUNT)
-      updatedSessionActions.shift();
-
-    setHistoryActions(updatedHistoryActions);
-    setSessionActions(updatedSessionActions);
-  };
+  useEffect(() => {
+    console.log("XXX: ", historyActions);
+  }, [historyActions]);
 
   const clearHistory = () => {
     setHistoryActions([]);
-    // setHistoryActions((history) => [...history, "AC"]);
     setSessionActions([]);
+    setTotalIndexes([]);
+  };
+
+  const addAction = (value) => {
+    function fixMultiLastOperators(actions) {
+      if (
+        action.includes(value) &&
+        actions.length > 0 &&
+        action.includes(actions[actions.length - 1])
+      ) {
+        actions.splice(actions.length - 1, 1, value);
+        return [...actions];
+      }
+      return [...actions, value];
+    }
+    setHistoryActions((history) => fixMultiLastOperators(history));
+    setSessionActions((session) => fixMultiLastOperators(session));
   };
 
   const equalsActions = () => {
-    const valid = !action.includes(historyActions[historyActions.length - 1]);
-    if (valid) {
-      const result = calculate(sessionActions.join(""));
-      setHistoryActions((history) => [...history, result]);
-      setSessionActions([result]);
-      setTotalIndexes((totals) => [
-        ...totals,
-        [...historyActions, result].length - 1,
-      ]);
-    } else {
-      setHistoryActions((history) => [...history, translations.err]);
-    }
+    const result = calculate(
+      sessionActions.length > 0 ? sessionActions.join("") : "0"
+    );
+    const valid = typeof result === "number";
 
+    if (valid) {
+      setSessionActions([result]);
+      setTotalIndexes((totals) => [...totals, historyActions.length]);
+    } else {
+      setLastError(result.text);
+    }
     setIsValid(valid);
+
+    setHistoryActions((history) => [
+      ...history,
+      valid ? result : translations.err,
+    ]);
   };
+
+  // const equalsActions = () => {
+  //   const valid = !action.includes(historyActions[historyActions.length - 1]);
+  //   let result;
+  //   if (valid) {
+  //     result = calculate(sessionActions.join(""));
+  //     if (typeof result === 'number') {
+  //       setSessionActions([result]);
+  //       setTotalIndexes((totals) => [...totals, historyActions.length]);
+  //     }
+  //   }
+
+  //   setIsValid(valid);
+  //   setHistoryActions((history) => [
+  //     ...history,
+  //     valid ? result : translations.err,
+  //   ]);
+  // };
 
   const clearDisplay = () => {
     setIsValid(true);
+    setLastError(null);
     setSessionActions([]);
-    // setIsClearDisplay(true);
   };
 
   return (
@@ -60,11 +88,12 @@ export const CalculatorProvider = ({ children }) => {
         historyActions,
         sessionActions,
         isValid,
+        totalIndexes,
+        lastError,
         addAction,
         clearHistory,
         equalsActions,
         clearDisplay,
-        totalIndexes,
       }}
     >
       {children}

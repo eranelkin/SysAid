@@ -10,13 +10,10 @@ import "./App.css";
 export default function App() {
   return (
     <Routes>
-      {/* <Route element={<HomeLayout />}>
-        <Route path="/" element={<HomePage />} />
-      </Route> */}
-
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<ProtectedRoute />}>
         <Route
+          index
           path="/"
           element={
             <CalculatorProvider>

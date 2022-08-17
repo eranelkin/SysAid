@@ -1,12 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useStyles } from "./panel.style";
 import { Button } from "@mui/material";
 import { useCalculator } from "../../../hooks/useCalculator";
 
 const Panel = () => {
-  const { actions, addAction, equalsActions, clearDisplay, isValid } =
-    useCalculator();
+  const { addAction, equalsActions, clearDisplay, isValid } = useCalculator();
   const classes = useStyles();
   const buttons = [
     "7",
@@ -52,7 +50,5 @@ const Panel = () => {
     </div>
   );
 };
-
-Panel.propTypes = {};
 
 export default Panel;

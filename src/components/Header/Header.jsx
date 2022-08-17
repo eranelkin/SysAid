@@ -1,27 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
 import { translations } from "../../translations/translations";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import clsx from "clsx";
 
 import { useStyles } from "./header.style";
 
-import MenuItem from "@mui/material/MenuItem";
+const SELECTED = {
+  CALC: "calculator",
+  HISTORY: "history",
+};
 
 const Header = ({ pages }) => {
+  const [selected, setSelected] = useState(SELECTED.CALC);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const classes = useStyles();
 
-  const handleRoute = (route) => () => {
+  useEffect(() => {
+    if (selected) {
+      navigate(selected === SELECTED.CALC ? "/" : "/history");
+    }
+  }, [selected, navigate]);
+
+  const handleButtonClick = (selectedBtn, route) => () => {
+    setSelected(selectedBtn);
     if (route) {
       navigate(route);
     }
@@ -31,22 +39,24 @@ const Header = ({ pages }) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="primary" className={classes.header}>
         <Toolbar>
-          <Typography variant="h6" component="div">
+          <Typography variant="h5" component="div" style={{ color: "black" }}>
             {translations.sysAid}
           </Typography>
           <Button
-            variant="outlined"
-            color="inherit"
-            style={{ marginLeft: 20 }}
-            onClick={handleRoute("/")}
+            variant="contained"
+            onClick={handleButtonClick(SELECTED.CALC, "/")}
+            className={clsx(classes.buttonMargin, {
+              [classes.selected]: selected === SELECTED.CALC,
+            })}
           >
             {translations.calculator}
           </Button>
           <Button
-            variant="outlined"
-            color="inherit"
-            style={{ marginLeft: 20 }}
-            onClick={handleRoute("/history")}
+            variant="contained"
+            onClick={handleButtonClick(SELECTED.HISTORY, "/history")}
+            className={clsx(classes.buttonMargin, {
+              [classes.selected]: selected === SELECTED.HISTORY,
+            })}
           >
             {translations.history}
           </Button>
@@ -55,17 +65,16 @@ const Header = ({ pages }) => {
             <>
               <Button
                 key={"logout"}
+                variant="contained"
                 onClick={logout}
-                variant="outlined"
-                color="inherit"
                 style={{ marginLeft: "auto", marginRight: 20 }}
               >
                 {translations.logout}
               </Button>
               <Typography
-                variant="h5"
+                variant="body1"
                 textAlign="center"
-                style={{ color: "black" }}
+                style={{ color: "#037284", fontWeight: "bold" }}
               >
                 {`${translations.prefixUser} ${user?.username}`}
               </Typography>

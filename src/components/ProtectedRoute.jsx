@@ -1,6 +1,5 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { AppBar } from "./Header/AppBar";
 import Header from "./Header/Header";
 
 const ProtectedRoute = () => {
@@ -13,12 +12,6 @@ const ProtectedRoute = () => {
 
   return (
     <div>
-      {/* <AppBar
-        pages={[
-          { label: "Calculator", path: "/" },
-          { label: "History", path: "history" },
-        ]}
-      /> */}
       <Header />
       {outlet}
     </div>
