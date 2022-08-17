@@ -1,12 +1,14 @@
+import { translations } from "../translations/translations";
+
 export default function validate(values) {
   let errors = {};
   if (!values.email) {
-    errors.email = "Email address is required";
+    errors.email = translations.emailRequire;
   } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = "Email address is invalid";
+    errors.email = translations.emailInvalid;
   }
   if (!values.username) {
-    errors.username = "Username is required";
+    errors.username = translations.usernameRequire;
   }
   return errors;
 }

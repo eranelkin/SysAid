@@ -3,9 +3,9 @@
 - [Table of contents](#table-of-contents)
 - [General info](#general-info)
 - [in-project](#in-project)
+- [not-in-project](#not-in-project)
 - [Technologies](#technologies)
 - [Setup](#setup)
-- [Tests](#tests)
 
 ## General info
 
@@ -23,6 +23,11 @@ This project is SysAid Home Assignment
     - handler for many edge cases (hope I cover them all)
     - nice style for many scenarios.
 
+## not-in-project
+
+- tests, tests and more tests
+- smarter login logic with tokens.
+
 ## Technologies
 
 Client
@@ -38,15 +43,6 @@ To run this project, install it locally using npm/yarn:
 $ cd [SysAid]
 $ yarn
 $ npm start
-```
-
-## Tests
-
-I implemented one unit test
-
-```
-$ cd [SysAid]
-$ npm test
 ```
 
 https://github.com/eranelkin/SysAid.git

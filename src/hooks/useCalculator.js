@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext } from "react";
 import { calculate } from "../utils/calculateTotal";
 import { translations } from "../translations/translations";
 
@@ -11,10 +11,6 @@ export const CalculatorProvider = ({ children }) => {
   const [isValid, setIsValid] = useState(true);
   const [lastError, setLastError] = useState(null);
   const [totalIndexes, setTotalIndexes] = useState([]);
-
-  useEffect(() => {
-    console.log("XXX: ", historyActions);
-  }, [historyActions]);
 
   const clearHistory = () => {
     setHistoryActions([]);
@@ -57,24 +53,6 @@ export const CalculatorProvider = ({ children }) => {
       valid ? result : translations.err,
     ]);
   };
-
-  // const equalsActions = () => {
-  //   const valid = !action.includes(historyActions[historyActions.length - 1]);
-  //   let result;
-  //   if (valid) {
-  //     result = calculate(sessionActions.join(""));
-  //     if (typeof result === 'number') {
-  //       setSessionActions([result]);
-  //       setTotalIndexes((totals) => [...totals, historyActions.length]);
-  //     }
-  //   }
-
-  //   setIsValid(valid);
-  //   setHistoryActions((history) => [
-  //     ...history,
-  //     valid ? result : translations.err,
-  //   ]);
-  // };
 
   const clearDisplay = () => {
     setIsValid(true);

@@ -10,4 +10,7 @@ export const translations = {
   username: "Enter you username",
   loginIn: " Login In",
   err: "ERR",
+  emailRequire: "Email address is required",
+  emailInvalid: "Email address is invalid",
+  usernameRequire: "Username is required",
 };

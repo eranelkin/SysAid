@@ -16,7 +16,7 @@ const SELECTED = {
   HISTORY: "history",
 };
 
-const Header = ({ pages }) => {
+const Header = () => {
   const [selected, setSelected] = useState(SELECTED.CALC);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
